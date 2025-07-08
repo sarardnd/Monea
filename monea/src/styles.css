@@ -1,0 +1,46 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Prata&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Oooh+Baby&family=Prata&display=swap');
+
+:root {
+  --color-fondo: #f2f1ee;
+  --color-primario: #5a9bd5;  /* Azul claro */
+  --color-texto: #333333;
+}
+
+body {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+/*
+.logo-text {
+  font-family: 'Caveat', cursive;
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin: 0;
+}*/
+.logo-text {
+  font-family: 'Oooh Baby', cursive;
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: 'Prata', serif;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primario);
+  font-weight: normal;
+  margin-top: 0.1rem;
+}
