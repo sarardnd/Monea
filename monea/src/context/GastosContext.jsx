@@ -1,21 +1,24 @@
 import { createContext, useState, useEffect, useContext } from "react";
 
-// Creamos el contexto
 const GastosContext = createContext();
 
-// Proveedor del contexto
 export function GastosProvider({ children }) {
-  const [gastos, setGastos] = useState([]);
+  const [gastos, setGastos] = useState(() => {
+    try {
+      const data = localStorage.getItem("gastos");
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error("Error al leer de localStorage", e);
+      return [];
+    }
+  });
 
-  // Al cargar, trae de localStorage
   useEffect(() => {
-    const data = localStorage.getItem("gastos");
-    if (data) setGastos(JSON.parse(data));
-  }, []);
-
-  // Al cambiar, guarda en localStorage
-  useEffect(() => {
-    localStorage.setItem("gastos", JSON.stringify(gastos));
+    try {
+      localStorage.setItem("gastos", JSON.stringify(gastos));
+    } catch (e) {
+      console.error("Error al guardar en localStorage", e);
+    }
   }, [gastos]);
 
   return (
@@ -25,7 +28,6 @@ export function GastosProvider({ children }) {
   );
 }
 
-// Custom hook para consumir el contexto
 export function useGastos() {
   return useContext(GastosContext);
 }
