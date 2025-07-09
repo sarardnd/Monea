@@ -3,7 +3,6 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { useState } from "react";
 
 const COLORS = ["#5a9bd5", "#82ca9d", "#ffc658", "#ff7f50", "#a9a9a9", "#8884d8", "#d0ed57"];
-
 const MONTHS = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -18,7 +17,7 @@ export default function Graficos() {
 
   // Filtrar gastos del mes/año seleccionado
   const gastosFiltrados = gastos.filter((g) => {
-    const fecha = new Date(g.fecha);
+    const fecha = new Date(g.fecha + "T00:00:00"); // <- Corregido
     return (
       g.tipo === "gasto" &&
       fecha.getMonth() === Number(mesSeleccionado) &&
@@ -32,13 +31,10 @@ export default function Graficos() {
     return acc;
   }, {});
 
-  const data = Object.entries(byCategoria).map(([name, value]) => ({
-    name,
-    value
-  }));
+  const data = Object.entries(byCategoria).map(([name, value]) => ({ name, value }));
 
   // Obtener años disponibles desde los datos
-  const aniosDisponibles = [...new Set(gastos.map(g => new Date(g.fecha).getFullYear()))];
+  const aniosDisponibles = [...new Set(gastos.map(g => new Date(g.fecha + "T00:00:00").getFullYear()))];
 
   return (
     <div className="p-6 text-center">

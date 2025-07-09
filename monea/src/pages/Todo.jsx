@@ -2,11 +2,15 @@ import { useGastos } from "../context/GastosContext.jsx";
 
 export default function Todo() {
   const { gastos } = useGastos();
-  const fmt = d => `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+
+  const fmt = (isoDateStr) => {
+    const d = new Date(isoDateStr + "T00:00:00"); // Asegura local correcto
+    return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+  };
 
   const soloGastos = gastos
     .filter(g => g.tipo === "gasto")
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    .sort((a, b) => new Date(b.fecha + "T00:00:00") - new Date(a.fecha + "T00:00:00"));
 
   return (
     <div className="p-6 overflow-x-auto">
@@ -22,7 +26,7 @@ export default function Todo() {
         <tbody>
           {soloGastos.map(g => (
             <tr key={g.id}>
-              <td className="p-2 border">{fmt(new Date(g.fecha))}</td>
+              <td className="p-2 border">{fmt(g.fecha)}</td>
               <td className="p-2 border">{g.monto.toFixed(2)}</td>
               <td className="p-2 border">{g.comentario || "-"}</td>
             </tr>

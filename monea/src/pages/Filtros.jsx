@@ -7,9 +7,9 @@ export default function Filtros() {
   const [hasta, setHasta] = useState("");
 
   const filtrarPorFecha = (fecha) => {
-    const fechaObj = new Date(fecha);
-    const desdeObj = desde ? new Date(desde) : null;
-    const hastaObj = hasta ? new Date(hasta) : null;
+    const fechaObj = new Date(fecha + "T00:00:00"); // <- Corregido
+    const desdeObj = desde ? new Date(desde + "T00:00:00") : null; // <- Corregido
+    const hastaObj = hasta ? new Date(hasta + "T00:00:00") : null; // <- Corregido
 
     return (
       (!desdeObj || fechaObj >= desdeObj) &&
@@ -19,7 +19,7 @@ export default function Filtros() {
 
   const resultados = gastos
     .filter((g) => filtrarPorFecha(g.fecha))
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    .sort((a, b) => new Date(b.fecha + "T00:00:00") - new Date(a.fecha + "T00:00:00")); // <- Corregido
 
   const totalIngresos = resultados
     .filter((g) => g.tipo === "ingreso")
@@ -30,10 +30,8 @@ export default function Filtros() {
     .reduce((sum, g) => sum + g.monto, 0);
 
   const fmt = (f) => {
-    const d = new Date(f);
-    return `${String(d.getDate()).padStart(2, "0")}/${String(
-      d.getMonth() + 1
-    ).padStart(2, "0")}`;
+    const d = new Date(f + "T00:00:00"); // <- Corregido
+    return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
   };
 
   return (

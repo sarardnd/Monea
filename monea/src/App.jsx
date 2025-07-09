@@ -23,6 +23,7 @@ function App() {
       monto: parseFloat(nuevo.monto),
       categoria: tipo === "gasto" ? (nuevo.categoria || "Sin categoría") : "",
       comentario: tipo === "gasto" ? nuevo.comentario || "" : "",
+      // Guardamos la fecha como string plano YYYY-MM-DD
       fecha: nuevo.fecha || new Date().toISOString().slice(0, 10),
     };
 
@@ -31,10 +32,11 @@ function App() {
   };
 
   const gastosDelMes = gastos.filter((g) => {
-    const f = new Date(g.fecha);
+    const f = new Date(g.fecha + "T00:00:00"); // Evita desfase UTC
     const hoy = new Date();
     return f.getMonth() === hoy.getMonth() && f.getFullYear() === hoy.getFullYear();
   });
+
   const totalIngresos = gastosDelMes.filter((g) => g.tipo === "ingreso").reduce((s, g) => s + g.monto, 0);
   const totalGastos = gastosDelMes.filter((g) => g.tipo === "gasto").reduce((s, g) => s + g.monto, 0);
   const balance = totalIngresos - totalGastos;
