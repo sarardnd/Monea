@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     cargarGastosDesdeDB().then((g) => {
-      if (g.length > 0) setGastos(g);
+      setGastos(g || []);
     });
   }, []);
 
@@ -65,7 +65,7 @@ function App() {
   return (
     <>
       <Helmet>
-        <link rel="icon" href="./public/logo.png" /> {/* Aquí pones la ruta a tu favicon */}
+        <link rel="icon" href="/logo.png" /> {/* Aquí pones la ruta a tu favicon */}
       </Helmet>
 
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#f5f1e9] text-[#1b1b1b] px-4">
