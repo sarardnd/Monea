@@ -49,6 +49,7 @@ function App() {
 
     const actualizado = gastos.filter((g) => g.id !== id);
     setGastos(actualizado);
+    guardarGastosEnDB(actualizado); // guarda los gastos en indexedDBS
   };
 
   const gastosDelMes = gastos.filter((g) => {
