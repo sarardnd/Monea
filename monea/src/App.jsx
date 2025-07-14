@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGastos } from "./context/GastosContext.jsx";
-import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.js";
+import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.jsx";
 import "./styles.css";
 
 function App() {
@@ -10,14 +10,12 @@ function App() {
   const [nuevo, setNuevo] = useState({ monto: "", categoria: "", comentario: "", fecha: "" });
   const navigate = useNavigate();
 
-  // Cargar datos al montar
   useEffect(() => {
     cargarGastosDesdeDB().then((g) => {
       if (g.length > 0) setGastos(g);
     });
   }, []);
 
-  // Guardar en IndexedDB cuando cambian los gastos
   useEffect(() => {
     guardarGastosEnDB(gastos);
   }, [gastos]);
@@ -50,6 +48,7 @@ function App() {
 
     const actualizado = gastos.filter((g) => g.id !== id);
     setGastos(actualizado);
+    guardarGastosEnDB(actualizado); // 👈 Se guarda en IndexedDB
   };
 
   const gastosDelMes = gastos.filter((g) => {
@@ -64,6 +63,10 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f5f1e9] text-[#1b1b1b] px-4">
+      
+      {/* LOGO (puedes reemplazar el src con tu imagen) */}
+      <img src="/logo.png" alt="Logo MONEA" className="w-20 h-20 mb-4" />
+
       <h1 className="logo-text mb-1">MONEA</h1>
       <p className="subtitle mb-6">control de gastos</p>
 
