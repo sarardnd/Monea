@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGastos } from "./context/GastosContext.jsx";
-import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.jsx";
+import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.js";
 import "./styles.css";
 
 function App() {
