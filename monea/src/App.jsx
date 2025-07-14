@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGastos } from "./context/GastosContext.jsx";
-import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.js"; // ✅ nuevo
+import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.jsx";
 import "./styles.css";
 
 function App() {
@@ -10,14 +10,14 @@ function App() {
   const [nuevo, setNuevo] = useState({ monto: "", categoria: "", comentario: "", fecha: "" });
   const navigate = useNavigate();
 
-  // ✅ Cargar datos desde IndexedDB al montar
+  // Cargar datos al montar
   useEffect(() => {
     cargarGastosDesdeDB().then((g) => {
       if (g.length > 0) setGastos(g);
     });
   }, []);
 
-  // ✅ Guardar en IndexedDB cuando cambian los gastos
+  // Guardar en IndexedDB cuando cambian los gastos
   useEffect(() => {
     guardarGastosEnDB(gastos);
   }, [gastos]);
@@ -41,6 +41,15 @@ function App() {
 
     setGastos((prev) => [...prev, entrada]);
     setNuevo({ monto: "", categoria: "", comentario: "", fecha: "" });
+  };
+
+  const eliminarGasto = (id) => {
+    const gasto = gastos.find((g) => g.id === id);
+    const confirmado = window.confirm(`¿Eliminar gasto de ${gasto.categoria} por ${gasto.monto.toFixed(2)} €?`);
+    if (!confirmado) return;
+
+    const actualizado = gastos.filter((g) => g.id !== id);
+    setGastos(actualizado);
   };
 
   const gastosDelMes = gastos.filter((g) => {
@@ -90,6 +99,35 @@ function App() {
         <div className="mt-4">
           <button onClick={() => navigate("/monea-plus")} className="boton-enviar">MONEA+</button>
         </div>
+      </div>
+
+      <div className="mt-8 w-full max-w-md bg-white rounded shadow p-4 text-left">
+        <h2 className="subtitle mb-4">Gastos del mes</h2>
+
+        {gastosDelMes.filter(g => g.tipo === "gasto").length === 0 ? (
+          <p>No hay gastos registrados este mes.</p>
+        ) : (
+          <ul className="divide-y">
+            {gastosDelMes
+              .filter(g => g.tipo === "gasto")
+              .map((g) => (
+                <li key={g.id} className="py-2 flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold">{g.categoria}</p>
+                    <p className="text-sm text-gray-600">{g.fecha} - {g.comentario}</p>
+                    <p className="text-red-600">{g.monto.toFixed(2)} €</p>
+                  </div>
+                  <button
+                    onClick={() => eliminarGasto(g.id)}
+                    className="text-red-500 hover:text-red-700 font-bold text-lg"
+                    title="Eliminar gasto"
+                  >
+                    🗑️
+                  </button>
+                </li>
+              ))}
+          </ul>
+        )}
       </div>
     </div>
   );
