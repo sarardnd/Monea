@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGastos } from "./context/GastosContext.jsx";
+import { guardarGastosEnDB, cargarGastosDesdeDB } from "./db.js"; // ✅ nuevo
 import "./styles.css";
 
 function App() {
@@ -8,6 +9,18 @@ function App() {
   const [tipo, setTipo] = useState("gasto");
   const [nuevo, setNuevo] = useState({ monto: "", categoria: "", comentario: "", fecha: "" });
   const navigate = useNavigate();
+
+  // ✅ Cargar datos desde IndexedDB al montar
+  useEffect(() => {
+    cargarGastosDesdeDB().then((g) => {
+      if (g.length > 0) setGastos(g);
+    });
+  }, []);
+
+  // ✅ Guardar en IndexedDB cuando cambian los gastos
+  useEffect(() => {
+    guardarGastosEnDB(gastos);
+  }, [gastos]);
 
   const manejarCambio = (e) => {
     setNuevo({ ...nuevo, [e.target.name]: e.target.value });
@@ -23,7 +36,6 @@ function App() {
       monto: parseFloat(nuevo.monto),
       categoria: tipo === "gasto" ? (nuevo.categoria || "Sin categoría") : "",
       comentario: tipo === "gasto" ? nuevo.comentario || "" : "",
-      // Guardamos la fecha como string plano YYYY-MM-DD
       fecha: nuevo.fecha || new Date().toISOString().slice(0, 10),
     };
 
@@ -32,7 +44,7 @@ function App() {
   };
 
   const gastosDelMes = gastos.filter((g) => {
-    const f = new Date(g.fecha + "T00:00:00"); // Evita desfase UTC
+    const f = new Date(g.fecha + "T00:00:00");
     const hoy = new Date();
     return f.getMonth() === hoy.getMonth() && f.getFullYear() === hoy.getFullYear();
   });
