@@ -142,13 +142,13 @@ function App() {
                       <div>
                         <p className="text-sm text-gray-600">{g.fecha} - {g.monto.toFixed(2)} €</p>
                       </div>
-                      <button
-                        onClick={() => eliminarGasto(g.id)}
-                        className="text-red-500 hover:text-red-700 font-bold text-lg"
-                        title="Eliminar gasto"
-                      >
-                        🗑️
-                      </button>
+                        <button
+  onClick={() => eliminarGasto(g.id)}
+  className="ml-2 p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-800 transition duration-200"
+  title="Eliminar gasto"
+>
+  🗑️
+</button>
                     </li>
                   ))}
               </ul>
