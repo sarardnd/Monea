@@ -113,9 +113,7 @@ function App() {
               .map((g) => (
                 <li key={g.id} className="py-2 flex justify-between items-center">
                   <div>
-                    <p className="font-semibold">{g.categoria}</p>
-                    <p className="text-sm text-gray-600">{g.fecha} - {g.comentario}</p>
-                    <p className="text-red-600">{g.monto.toFixed(2)} €</p>
+                    <p className="text-sm text-gray-600">{g.fecha} - {g.monto.toFixed(2)} €</p>
                   </div>
                   <button
                     onClick={() => eliminarGasto(g.id)}
